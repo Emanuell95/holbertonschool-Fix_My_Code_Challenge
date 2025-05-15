@@ -18,29 +18,31 @@ int delete_dnodeint_at_index(dlistint_t **head, unsigned int index)
 
     current = *head;
 
-    for (i = 0; i < index; i++)
-    {
-        if (current == NULL)
-            return (-1);
-        current = current->next;
-    }
-
-    if (current == NULL)
-        return (-1);
-
-    if (current->prev == NULL)
+    /* Special case for first node (index 0) */
+    if (index == 0)
     {
         *head = current->next;
         if (*head != NULL)
             (*head)->prev = NULL;
-    }
-    else
-    {
-        current->prev->next = current->next;
-        if (current->next != NULL)
-            current->next->prev = current->prev;
+        free(current);
+        return (1);
     }
 
+    /* Traverse to the node at the specified index */
+    for (i = 0; i < index; i++)
+    {
+        if (current->next == NULL)
+            return (-1);
+        current = current->next;
+    }
+
+    /* Update the linked list pointers to bypass the node being deleted */
+    if (current->next != NULL)
+        current->next->prev = current->prev;
+    if (current->prev != NULL)
+        current->prev->next = current->next;
+
+    /* Free the memory of the node being deleted */
     free(current);
     return (1);
 }

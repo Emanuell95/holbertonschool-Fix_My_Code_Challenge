@@ -42,7 +42,7 @@ int delete_dnodeint_at_index(dlistint_t **head, unsigned int index)
     if (current->prev != NULL)
         current->prev->next = current->next;
 
-    /* Free the memory of the node being deleted */
+    /* Free the memory of the node being delete */
     free(current);
     return (1);
 }
